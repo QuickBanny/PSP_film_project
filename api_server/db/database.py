@@ -2,6 +2,8 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError, DataError
 from sqlalchemy.orm import sessionmaker, Session
 
+from db.models.base import BaseModel
+
 
 class DBSession:
     _session: Session
