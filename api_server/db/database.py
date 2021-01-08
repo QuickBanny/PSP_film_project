@@ -37,7 +37,6 @@ class DBSession:
             self.close_session()
 
 
-
 class DataBase:
     connection: Engine
     session_factory: sessionmaker
