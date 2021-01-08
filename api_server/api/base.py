@@ -1,5 +1,7 @@
 from marshmallow import Schema, EXCLUDE, ValidationError
 
+from api.Exception import ApiValidationException, ApiResponseValidationException
+
 
 class RequestDto:
     __schema__: Schema
@@ -43,7 +45,7 @@ class ResponseDto:
         try:
             self._data = self.__schema__(unknown=EXCLUDE).load(properties)
         except ValidationError as e:
-            raise ApiResponceValidationException(e.messages)
+            raise ApiResponseValidationException(e.messages)
 
     def dump(self) -> dict:
         return self._data

@@ -6,6 +6,9 @@ from sqlalchemy import Column, VARCHAR, String
 
 
 class DBUserModel(BaseModel):
+
+    __tablename__ = 'users'
+
     first_name = Column(VARCHAR(50))
     last_name = Column(VARCHAR(50))
     password = Column(String(120))
