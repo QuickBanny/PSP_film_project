@@ -11,7 +11,7 @@ def configure_app(config: ApplicationConfig, context: Context):
 
     app = Sanic(__name__)
 
-    for handler in get_routes(config.sanic, context):
+    for handler in get_routes(config, context):
         app.add_route(
             handler=handler,
             uri=handler.uri,

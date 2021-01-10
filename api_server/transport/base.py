@@ -3,9 +3,9 @@ from typing import Iterable
 
 from config.app_config import ApplicationConfig
 from sanic.request import Request
-from sanic.response import BaseHTTPResponse
+from sanic.response import BaseHTTPResponse, json
 
-from PSP_film_project.api_server.context import Context
+from context import Context
 
 
 class SanicEndpoint:
@@ -17,14 +17,21 @@ class SanicEndpoint:
         self.methods = methods
         self.__name__ = self.__class__.__name__
 
-    async def __call__(self, *args, **kwargs):
+    async def __call__(self, *args, **kwargs) -> BaseHTTPResponse:
         return await self.handler(*args, **kwargs)
 
     @staticmethod
     async def make_response_json(
-            body: dict = None, status: int = 200, messages: str = None, error_code: int = None
+            body: dict = None, status: int = 200, message: str = None, error_code: int = None
     ) -> BaseHTTPResponse:
-        pass
+
+        if body is None:
+            body = {
+                'message': message or HTTPStatus(status).phrase,
+                'error_code': error_code or status
+            }
+
+        return json(body=body, status=status)
 
     @staticmethod
     def import_body_json(request: Request):
@@ -40,7 +47,7 @@ class SanicEndpoint:
             if header.lower().startswith('x-')
         }
 
-    async def headers(self, request: Request, *args, **kwargs) -> BaseHTTPResponse:
+    async def handler(self, request: Request, *args, **kwargs) -> BaseHTTPResponse:
         body = {}
 
         body.update(self.import_body_json(request))
@@ -48,7 +55,7 @@ class SanicEndpoint:
 
         return await self._method(request, body, *args, **kwargs)
 
-    async def _method(self, request: Request, body: dict, *args, **kwargs):
+    async def _method(self, request: Request, body: dict, *args, **kwargs) -> BaseHTTPResponse:
         method = request.method.lower()
         func_name = f'method_{method}'
 
