@@ -8,5 +8,4 @@ class GetTestEndpoint(BaseEndpoint):
         response = {
             'test': 'OK'
         }
-        print(response)
         return await self.make_response_json(body=response, status=200)

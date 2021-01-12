@@ -4,6 +4,8 @@ from sqlalchemy.orm import sessionmaker, Session
 
 from db.models.base import BaseModel
 
+from db.exceptions import DBIntegrityException, DBDataException
+
 
 class DBSession:
     _session: Session
@@ -21,17 +23,17 @@ class DBSession:
         try:
             self._session.add(model)
         except IntegrityError as e:
-            pass
+            raise DBIntegrityException(e)
         except DataError as e:
-            pass
+            raise DBDataException(e)
 
     def commit_session(self, need_close: bool = False):
         try:
-            self._session.connection()
+            self._session.commit()
         except IntegrityError as e:
-            pass
+            raise DBIntegrityException(e)
         except DataError as e:
-            pass
+            raise DBDataException(e)
 
         if need_close:
             self.close_session()

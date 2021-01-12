@@ -8,11 +8,12 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from config.appconfig import ApplicationConfig
-from db.models import BaseModel
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
+
+from db.models import BaseModel
+from config.app_config import ApplicationConfig
 
 
 # this is the Alembic Config object, which provides
@@ -40,7 +41,7 @@ def get_sqlalchemy_url() -> str:
     return app_config.database.url
 
 
-config.set_main_options('sqlalchemy.url', get_sqlalchemy_url())
+config.set_main_option('sqlalchemy.url', get_sqlalchemy_url())
 
 
 def run_migrations_offline():

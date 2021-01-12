@@ -1,4 +1,6 @@
-from marshmallow import Schema, EXCLUDE, ValidationError
+import datetime
+
+from marshmallow import Schema, EXCLUDE, ValidationError, pre_load, post_load
 
 from api.Exception import ApiValidationException, ApiResponseValidationException
 
@@ -32,7 +34,7 @@ class ResponseDto:
             if not prop.startswith('_') and not prop.endswith('_'):
                 attr = getattr(obj, prop)
                 if not callable(attr):
-                    properties['prop'] = attr
+                    properties[prop] = attr
         """
         properties = {
             prop: value

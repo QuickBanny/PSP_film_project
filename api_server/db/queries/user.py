@@ -10,7 +10,5 @@ def create_user(session: DBSession, user: RequestCreateUserDto) -> DBUserModel:
         password=user.password,
         email=user.email
     )
-
     session.add_model(new_user)
-
     return new_user
